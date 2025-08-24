@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.17.0",
+    "@gradio/client": "^1.17.1",
     "genkit": "^1.17.0"
   }
 }
