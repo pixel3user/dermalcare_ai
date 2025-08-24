@@ -32,11 +32,11 @@ export const dermacareFlow = ai.defineFlow(
     outputSchema: DermacareOutputSchema,
   },
   async ({ question, image }) => {
-    const app = await Client.connect('ColdSlim/DermalCare', {
+    const app = await Client.connect(process.env.SPACE_BASE_URL!, {
       hf_token: process.env.HF_TOKEN,
     });
 
-    const result = await app.predict('/generate_answer', {
+    const result = await app.predict(process.env.API_NAME!, {
       image: image ? handle_file(image) : null,
       question,
       temperature: 0.7,
