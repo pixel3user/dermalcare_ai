@@ -1,0 +1,24 @@
+{
+  "name": "dermalcare_ai",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "genkit:ui": "genkit start -- npx tsx --watch src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "devDependencies": {
+    "cross-env": "^10.0.0",
+    "dotenv": "^17.2.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@genkit-ai/googleai": "^1.17.0",
+    "genkit": "^1.17.0"
+  }
+}
