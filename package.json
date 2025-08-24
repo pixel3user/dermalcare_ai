@@ -18,6 +18,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@genkit-ai/firebase": "^1.17.0",
     "@genkit-ai/googleai": "^1.17.0",
     "@gradio/client": "^1.17.1",
     "genkit": "^1.17.0"
