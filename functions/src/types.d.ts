@@ -8,4 +8,3 @@ declare module "@gradio/client" {
   // eslint-disable-next-line camelcase
   export const handle_file: any;
 }
-

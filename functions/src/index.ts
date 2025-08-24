@@ -13,4 +13,3 @@ const HF_TOKEN = defineSecret("HF_TOKEN");
 export const dermacare = onFlowRequest(dermacareFlow, {
   secrets: [SPACE_BASE_URL, API_NAME, HF_TOKEN],
 });
-
