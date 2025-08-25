@@ -2,7 +2,7 @@ import {setGlobalOptions} from "firebase-functions";
 import {onFlowRequest} from "@genkit-ai/firebase/functions";
 import {defineSecret} from "firebase-functions/params";
 
-import {dermacareFlow} from "../../src/index";
+import {dermacareFlow} from "./flow";
 
 const SPACE_BASE_URL = defineSecret("SPACE_BASE_URL");
 const API_NAME = defineSecret("API_NAME");
