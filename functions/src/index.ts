@@ -2,7 +2,7 @@ import {setGlobalOptions} from "firebase-functions";
 import {onFlowRequest} from "@genkit-ai/firebase/functions";
 import {defineSecret} from "firebase-functions/params";
 
-import {dermacareFlow} from "../../src/index.js";
+import {dermacareFlow} from "@src/index";
 
 setGlobalOptions({maxInstances: 10});
 
