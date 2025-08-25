@@ -13,9 +13,13 @@
   "engines": {
     "node": "22"
   },
-  "main": "lib/src/index.js",
+  "main": "lib/index.js",
   "dependencies": {
-    "@genkit-ai/firebase": "^1.17.0",
+    "@genkit-ai/ai": "^1.17.1",
+    "@genkit-ai/core": "^1.17.1",
+    "@genkit-ai/dotprompt": "^0.9.12",
+    "@genkit-ai/firebase": "^1.17.1",
+    "@genkit-ai/flow": "^0.5.17",
     "firebase-admin": "^12.6.0",
     "firebase-functions": "^6.0.1",
     "genkit": "^1.17.0",

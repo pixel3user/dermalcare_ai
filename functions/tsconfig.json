@@ -11,9 +11,6 @@
     "strict": true,
     "target": "es2017",
     "baseUrl": ".",
-    "paths": {
-      "@src/*": ["../src/*"]
-    }
   },
   "compileOnSave": true,
   "include": [
