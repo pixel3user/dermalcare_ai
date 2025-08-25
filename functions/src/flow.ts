@@ -1,12 +1,11 @@
 import {googleAI} from "@genkit-ai/googleai";
 import {genkit, z} from "genkit";
-import {Client, handle_file as handleFile} from "@gradio/client";
+// CHANGE 1: We no longer import Client and handleFile from here.
 import "dotenv/config";
 import {enableFirebaseTelemetry} from "@genkit-ai/firebase";
 
 enableFirebaseTelemetry();
 
-// Initialize Genkit with the Google AI plugin
 const ai = genkit({
   plugins: [googleAI()],
   model: googleAI.model("gemini-1.5-flash", {
@@ -14,18 +13,15 @@ const ai = genkit({
   }),
 });
 
-// Define input schema for DermalCare LLM
 const DermacareInputSchema = z.object({
   question: z.string().describe("User question about skin issues"),
   image: z.string().optional().describe("Optional path or URL to an image"),
 });
 
-// Define output schema for DermalCare LLM
 const DermacareOutputSchema = z.object({
   answer: z.string(),
 });
 
-// Define a flow that calls the DermalCare LLM hosted on Hugging Face Spaces
 export const dermacareFlow = ai.defineFlow(
   {
     name: "dermacareFlow",
@@ -33,6 +29,9 @@ export const dermacareFlow = ai.defineFlow(
     outputSchema: DermacareOutputSchema,
   },
   async ({question, image}) => {
+    // CHANGE 2: We dynamically import the library here, inside the function.
+    const {Client, handle_file: handleFile} = await import("@gradio/client");
+
     const app = await Client.connect(process.env.SPACE_BASE_URL!, {
       hf_token: process.env.HF_TOKEN,
     });
