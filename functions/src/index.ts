@@ -1,5 +1,5 @@
 import {setGlobalOptions} from "firebase-functions";
-import {onFlowRequest} from "@genkit-ai/firebase/functions";
+import {onRequest} from "firebase-functions/v2/https";
 import {defineSecret} from "firebase-functions/params";
 
 import {dermacareFlow} from "./flow";
@@ -13,4 +13,7 @@ setGlobalOptions({
   secrets: [SPACE_BASE_URL, API_NAME, HF_TOKEN],
 });
 
-export const dermacare = onFlowRequest(dermacareFlow);
+export const dermacare = onRequest(async (req, res) => {
+  const result = await dermacareFlow(req.body);
+  res.json(result);
+});
