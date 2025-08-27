@@ -1,21 +1,24 @@
-import {setGlobalOptions} from "firebase-functions";
-import {onRequest} from "firebase-functions/v2/https";
-import {defineSecret} from "firebase-functions/params";
+import { setGlobalOptions } from "firebase-functions";
+import { onRequest } from "firebase-functions/v2/https";
+import * as admin from "firebase-admin";
+import { defineSecret } from "firebase-functions/params";
+import { dermacareFlow } from "./flow";
 
-import {dermacareFlow} from "./flow";
-
-const SPACE_BASE_URL = defineSecret("SPACE_BASE_URL");
-const API_NAME = defineSecret("API_NAME");
-const HF_TOKEN = defineSecret("HF_TOKEN");
-
-setGlobalOptions({
-  maxInstances: 10,
-  secrets: [SPACE_BASE_URL, API_NAME, HF_TOKEN],
-});
+admin.initializeApp();
 
 export const dermacare = onRequest(async (req, res) => {
-  const result = await dermacareFlow(req.body);
-  res.json(result);
+  const authHeader = req.headers.authorization || "";
+  if (!authHeader.startsWith("Bearer ")) {
+    res.status(401).json({ error: "No auth token" });
+    return;
+  }
+
+  const idToken = authHeader.substring(7);
+  try {
+    await admin.auth().verifyIdToken(idToken);   // token valid
+    const result = await dermacareFlow(req.body);
+    res.json(result);
+  } catch (err) {
+    res.status(401).json({ error: "Unauthorized" });
+  }
 });
-
-
