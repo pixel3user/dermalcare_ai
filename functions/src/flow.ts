@@ -1,7 +1,7 @@
+// functions/src/flow.ts
 import {googleAI} from "@genkit-ai/googleai";
 import {genkit, z} from "genkit";
-// CHANGE 1: We no longer import Client and handleFile from here.
-import "dotenv/config";
+import "dotenv/config"; // For local development only
 import {enableFirebaseTelemetry} from "@genkit-ai/firebase";
 
 enableFirebaseTelemetry();
@@ -29,14 +29,38 @@ export const dermacareFlow = ai.defineFlow(
     outputSchema: DermacareOutputSchema,
   },
   async ({question, image}) => {
-    // CHANGE 2: We dynamically import the library here, inside the function.
+    // --- START: Environment Variable Validation ---
+    const spaceBaseUrl = process.env.SPACE_BASE_URL;
+    const hfToken = process.env.HF_TOKEN;
+    const apiName = process.env.API_NAME;
+
+    if (!spaceBaseUrl) {
+      // This provides a clear error if a variable is missing.
+      throw new Error(
+        "Missing required environment spaceurl"
+      );
+    }
+    if (!hfToken) {
+      // This provides a clear error if a variable is missing.
+      throw new Error(
+        "Missing required environment hftoken"
+      );
+    }
+    if (!apiName) {
+      // This provides a clear error if a variable is missing.
+      throw new Error(
+        "Missing required environment apiname"
+      );
+    }
+    // --- END: Environment Variable Validation ---
+
     const {Client, handle_file: handleFile} = await import("@gradio/client");
 
-    const app = await Client.connect(process.env.SPACE_BASE_URL!, {
-      hf_token: process.env.HF_TOKEN,
+    const app = await Client.connect(spaceBaseUrl, {
+      hf_token: hfToken,
     });
 
-    const result = await app.predict(process.env.API_NAME!, {
+    const result = await app.predict(apiName, {
       image: image ? handleFile(image) : null,
       question,
       temperature: 0.7,

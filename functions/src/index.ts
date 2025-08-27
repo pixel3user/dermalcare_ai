@@ -4,24 +4,42 @@ import * as admin from "firebase-admin";
 import {dermacareFlow} from "./flow";
 import {setGlobalOptions} from "firebase-functions";
 
-admin.initializeApp();
-// If you keep setGlobalOptions, use it so it isn't "unused"
-setGlobalOptions({region: "asia-east1"}); // pick your region
+// Explicitly initialize with your Project ID to prevent any ambiguity.
+admin.initializeApp({
+  projectId: "dermalcare-69",
+});
+
+setGlobalOptions({region: "us-central1"});
 
 export const dermacare = onRequest(async (req, res) => {
   const authHeader = req.headers.authorization || "";
-  if (!authHeader.startsWith("Bearer ")) {
-    res.status(401).json({error: "No auth token"});
+
+  // Make the check case-insensitive to be more robust.
+  if (!authHeader.toLowerCase().startsWith("bearer ")) {
+    res.status(401).json({
+      error: "No auth token",
+      details: "Authorization header is missing or no start with 'Bearer '.",
+    });
     return;
   }
 
   const idToken = authHeader.substring(7);
+
   try {
-    await admin.auth().verifyIdToken(idToken); // token valid
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    console.log("Successfully authenticated user:", decodedToken.uid);
+
     const result = await dermacareFlow(req.body);
     res.json(result);
   } catch (error) {
-    console.error("dermacare error:", error); // now it's “used”
-    res.status(401).json({error: "Unauthorized"});
+    // FIX: Cast the 'unknown' error to the 'Error' type
+    const typedError = error as Error;
+
+    console.error("Token verification failed:", typedError);
+    res.status(401).json({
+      error: "Unauthorized",
+      // Now you can safely access the message property
+      details: typedError.message,
+    });
   }
 });
