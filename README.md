@@ -73,7 +73,7 @@ firebase functions:secrets:set API_NAME
 firebase functions:secrets:set HF_TOKEN
 ```
 
-These commands will prompt for the corresponding values and make them available to your deployed Cloud Functions.
+These commands will prompt for the corresponding values and make them available to your deployed Cloud Functions. The functions now read configuration exclusively from Firebase Secrets, so a `.env` file or `dotenv` is not required in production.
 
 ## Troubleshooting
 

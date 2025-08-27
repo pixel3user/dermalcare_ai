@@ -1,8 +1,8 @@
 // functions/src/flow.ts
 import {googleAI} from "@genkit-ai/googleai";
 import {genkit, z} from "genkit";
-import "dotenv/config"; // For local development only
 import {enableFirebaseTelemetry} from "@genkit-ai/firebase";
+import {SPACE_BASE_URL, HF_TOKEN, API_NAME} from "./index";
 
 enableFirebaseTelemetry();
 
@@ -29,30 +29,30 @@ export const dermacareFlow = ai.defineFlow(
     outputSchema: DermacareOutputSchema,
   },
   async ({question, image}) => {
-    // --- START: Environment Variable Validation ---
-    const spaceBaseUrl = process.env.SPACE_BASE_URL;
-    const hfToken = process.env.HF_TOKEN;
-    const apiName = process.env.API_NAME;
+    // --- START: Secret Value Validation ---
+    const spaceBaseUrl = SPACE_BASE_URL.value();
+    const hfToken = HF_TOKEN.value();
+    const apiName = API_NAME.value();
 
     if (!spaceBaseUrl) {
-      // This provides a clear error if a variable is missing.
+      // This provides a clear error if a secret is missing.
       throw new Error(
-        "Missing required environment spaceurl"
+        "Missing required secret SPACE_BASE_URL"
       );
     }
     if (!hfToken) {
-      // This provides a clear error if a variable is missing.
+      // This provides a clear error if a secret is missing.
       throw new Error(
-        "Missing required environment hftoken"
+        "Missing required secret HF_TOKEN"
       );
     }
     if (!apiName) {
-      // This provides a clear error if a variable is missing.
+      // This provides a clear error if a secret is missing.
       throw new Error(
-        "Missing required environment apiname"
+        "Missing required secret API_NAME"
       );
     }
-    // --- END: Environment Variable Validation ---
+    // --- END: Secret Value Validation ---
 
     const {Client, handle_file: handleFile} = await import("@gradio/client");
 
