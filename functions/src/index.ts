@@ -5,8 +5,14 @@ import {dermacareFlow} from "./flow";
 import {setGlobalOptions} from "firebase-functions";
 import cors from "cors";
 
+const allowedOrigins = [
+  "https://dermalcare-69.web.app",
+  "https://dermalcare-69.firebaseapp.com",
+  "http://localhost:3000",
+];
+
 const corsHandler = cors({
-  origin: ["https://dermalcare-69.web.app/", "http://localhost:3000"],
+  origin: allowedOrigins,
   methods: ["POST", "OPTIONS"],
   allowedHeaders: ["Authorization", "Content-Type"],
 });
