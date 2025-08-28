@@ -6,15 +6,13 @@ import {setGlobalOptions} from "firebase-functions";
 import cors from "cors";
 
 const corsHandler = cors({
-  origin: ["https://<your-webapp-domain>", "http://localhost:3000"],
+  origin: ["https://dermalcare-69.web.app/", "http://localhost:3000"],
   methods: ["POST", "OPTIONS"],
   allowedHeaders: ["Authorization", "Content-Type"],
 });
 
 // Explicitly initialize with your Project ID to prevent any ambiguity.
-admin.initializeApp({
-  projectId: "dermalcare-69",
-});
+admin.initializeApp();
 
 setGlobalOptions({region: "us-central1"});
 
