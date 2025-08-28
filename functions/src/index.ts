@@ -5,8 +5,12 @@ import {dermacareFlow} from "./flow";
 import {setGlobalOptions} from "firebase-functions";
 import cors from "cors";
 
+const allowedOrigins = [
+  "https://dermalcare-69.web.app/",
+  "http://localhost:3000",
+];
 const corsHandler = cors({
-  origin: ["https://dermalcare-69.web.app/", "http://localhost:3000"],
+  origin: allowedOrigins,
   methods: ["POST", "OPTIONS"],
   allowedHeaders: ["Authorization", "Content-Type"],
 });
@@ -20,6 +24,24 @@ export const dermacare = onRequest((req, res) => {
   corsHandler(req, res, async () => {
     if (req.method === "OPTIONS") {
       res.status(204).send("");
+      return;
+    }
+
+    const origin = req.headers.origin;
+    if (!origin) {
+      console.warn("Missing Origin header:", origin);
+      res.status(401).json({
+        error: "No origin",
+        details: "Origin header is missing.",
+      });
+      return;
+    }
+    if (!allowedOrigins.includes(origin)) {
+      console.warn("Rejected request from origin:", origin);
+      res.status(403).json({
+        error: "Forbidden",
+        details: "Origin not allowed.",
+      });
       return;
     }
 
